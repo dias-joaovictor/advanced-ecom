@@ -1,0 +1,69 @@
+info:
+  app:
+    name: Product Feed Service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health
+
+springdoc:
+  swagger-ui:
+    path: /
+
+spring:
+  application:
+    name: product-feed-service
+  jpa:
+    open-in-view: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:13306/pfs}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${DATASOURCE_USERNAME:pfs}
+    password: ${DATASOURCE_PASSWORD:pfs}
+    flyway:
+      user: ${DATASOURCE_USERNAME:pfs}
+      password: ${DATASOURCE_PASSWORD:pfs}
+
+  cloud:
+    stream:
+      default:
+        group: ProductFeedService
+        producer:
+          header-mode: none
+      kafka:
+        binder:
+          brokers: ${KAFKA_BROKER_LIST:localhost:9092}
+          configuration:
+            security:
+              protocol: PLAINTEXT
+        bindings:
+          default:
+            consumer:
+              ack-mode: record
+        default:
+          content-type: application/json
+          consumer:
+            start-offset: latest
+      bindings:
+        default:
+          content-type: application/json
+        #Producer kafka topic
+        productDataFeed-out-0:
+          destination: ProductDataFeed
+    function:
+      definition: productDataFeed
+
+
+tasks:
+  product-update:
+    cron-expression: "0/10 * * * * *"
+  full-product-export:
+    cron-expression: "0 0/2 * * * *"

@@ -1,0 +1,52 @@
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    hostname: zookeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:latest
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    links:
+      - zookeeper
+    ports:
+      - "9092:9092"  # External access port (for the host IP)
+      - "29092:29092"  # Internal Docker network access port
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+
+      # Bind Kafka to all interfaces on port 29092 for internal Docker network communication
+      - KAFKA_LISTENERS=INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+
+      # Advertise both internal (Docker) and external (Host) listeners with unique names
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,EXTERNAL://${LOCAL_IP}:9092
+
+      # Map listener names to security protocols
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CREATE_TOPICS=ProductDataFeed:1:1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  pds-mysql:
+    image: mysql:8
+    ports:
+      - "13306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=pfs
+      - MYSQL_USER=pfs
+      - MYSQL_PASSWORD=pfs
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "mysql -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} -D$${MYSQL_DATABASE} -e 'SELECT 1;'"
+      ]
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
