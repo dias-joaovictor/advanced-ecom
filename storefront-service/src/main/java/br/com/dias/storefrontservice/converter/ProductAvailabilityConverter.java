@@ -2,9 +2,10 @@ package br.com.dias.storefrontservice.converter;
 
 import br.com.dias.storefrontservice.entity.ProductData;
 import br.com.dias.storefrontservice.model.inbound.messaging.ProductDataFeed;
+import br.com.dias.storefrontservice.model.inbound.response.ProductAvailability;
 import org.mapstruct.Mapper;
 
 @Mapper
-public interface ProductDataFeedConverter {
-    ProductData convert(ProductDataFeed productDataFeed);
+public interface ProductAvailabilityConverter {
+    ProductAvailability convert(ProductData productData);
 }

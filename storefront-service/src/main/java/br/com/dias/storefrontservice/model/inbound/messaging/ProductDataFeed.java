@@ -1,4 +1,4 @@
-package br.com.dias.storefrontservice.model.inbound;
+package br.com.dias.storefrontservice.model.inbound.messaging;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

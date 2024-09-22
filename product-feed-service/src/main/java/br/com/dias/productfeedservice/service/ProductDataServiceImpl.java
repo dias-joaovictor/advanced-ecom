@@ -17,8 +17,9 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class ProductDataServiceImpl implements ProductDataService {
 
-    public static final BigDecimal TEN = new BigDecimal(10);
-    public static final BigDecimal HUNDRED = new BigDecimal(100);
+    private static final BigDecimal TEN = new BigDecimal(10);
+    private static final BigDecimal HUNDRED = new BigDecimal(100);
+    private static final BigDecimal TWENTY_FIVE = new BigDecimal(25);
     private final ProductDataRepository productDataRepository;
 
     private final ProductDataProducer productDataProducer;
@@ -63,6 +64,9 @@ public class ProductDataServiceImpl implements ProductDataService {
                     .divide(HUNDRED, new MathContext(2)));
 
             var newPrice = productData.getPrice().multiply(priceChangeFactor);
+            if (newPrice.compareTo(TWENTY_FIVE) < 0) {
+                newPrice = TWENTY_FIVE;
+            }
             productData.setPrice(newPrice);
             productData.setQuantity(random.nextInt(100));
         }

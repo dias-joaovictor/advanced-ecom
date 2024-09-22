@@ -72,6 +72,6 @@ eureka:
 
 tasks:
   product-update:
-    cron-expression: "0/10 * * * * *"
+    cron-expression: "0 0/3 * * * *"
   full-product-export:
-    cron-expression: "0 0/2 * * * *"
+    cron-expression: "0 0/10 * * * *"
