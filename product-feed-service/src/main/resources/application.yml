@@ -61,6 +61,11 @@ spring:
     function:
       definition: productDataFeed
 
+eureka:
+  client:
+    service-url:
+      default-zone: http://${EUREKA_HOST:localhost:8761}/eureka/
+
 
 tasks:
   product-update:

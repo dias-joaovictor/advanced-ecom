@@ -1,0 +1,1 @@
+https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.3.4&packaging=jar&jvmVersion=21&groupId=br.com.dias&artifactId=service-discovery&name=Service%20Discovery&description=&packageName=br.com.dias.servicediscovery&dependencies=cloud-stream,web,security,data-jpa,mysql,devtools,lombok
