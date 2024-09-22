@@ -1,4 +1,4 @@
-package br.com.dias.productfeedservice.model.outbound;
+package br.com.dias.storefrontservice.model.inbound;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,5 +25,4 @@ public class ProductDataFeed {
 
     private int quantity;
 
-    private Instant updatedAt;
 }

@@ -1,4 +1,4 @@
-package br.com.dias.productfeedservice.entity;
+package br.com.dias.storefrontservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,7 +19,6 @@ import java.util.UUID;
 public class ProductData extends EcommerceEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(Types.CHAR)
     private UUID id;
 

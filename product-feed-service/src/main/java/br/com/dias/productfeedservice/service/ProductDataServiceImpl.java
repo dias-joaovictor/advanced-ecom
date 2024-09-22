@@ -54,13 +54,19 @@ public class ProductDataServiceImpl implements ProductDataService {
 
     private void fakeUpdatePrice(ProductData productData) {
         log.info("Updating price for {}", productData);
-        BigDecimal priceChangeFactor = BigDecimal.ONE.add(new BigDecimal(random.nextBoolean() ? 1 : -1)
-                .multiply(new BigDecimal(random.nextInt(41))
-                        .add(TEN))
-                .divide(HUNDRED, new MathContext(2)));
+        productData.setEnabled(random.nextBoolean());
 
-        var newPrice = productData.getPrice().multiply(priceChangeFactor);
-        productData.setPrice(newPrice);
+        if (productData.isEnabled()) {
+            BigDecimal priceChangeFactor = BigDecimal.ONE.add(new BigDecimal(random.nextBoolean() ? 1 : -1)
+                    .multiply(new BigDecimal(random.nextInt(41))
+                            .add(TEN))
+                    .divide(HUNDRED, new MathContext(2)));
+
+            var newPrice = productData.getPrice().multiply(priceChangeFactor);
+            productData.setPrice(newPrice);
+            productData.setQuantity(random.nextInt(100));
+        }
+
     }
 
 }

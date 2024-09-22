@@ -1,9 +1,9 @@
 info:
   app:
-    name: Product Feed Service
+    name: Storefront Service
 
 server:
-  port: 8080
+  port: 8081
 
 management:
   endpoints:
@@ -17,7 +17,7 @@ springdoc:
 
 spring:
   application:
-    name: product-feed-service
+    name: storefront-service
   jpa:
     open-in-view: false
     hibernate:
@@ -27,18 +27,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
   datasource:
-    url: ${DATASOURCE_URL:jdbc:mysql://localhost:13306/pfs}
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:23306/sfs}
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: ${DATASOURCE_USERNAME:pfs}
-    password: ${DATASOURCE_PASSWORD:pfs}
+    username: ${DATASOURCE_USERNAME:sfs}
+    password: ${DATASOURCE_PASSWORD:sfs}
     flyway:
-      user: ${DATASOURCE_USERNAME:pfs}
-      password: ${DATASOURCE_PASSWORD:pfs}
+      user: ${DATASOURCE_USERNAME:sfs}
+      password: ${DATASOURCE_PASSWORD:sfs}
 
   cloud:
     stream:
       default:
-        group: ProductFeedService
+        group: StorefrontService
         producer:
           header-mode: none
       kafka:
@@ -58,20 +58,13 @@ spring:
       bindings:
         default:
           content-type: application/json
-        #Producer kafka topic
-        productDataFeed-out-0:
+        #Consumer kafka topic
+        productDataFeedConsumer-in-0:
           destination: ProductDataFeed
     function:
-      definition: productDataFeed
+      definition: productDataFeedConsumer
 
 eureka:
   client:
     service-url:
       default-zone: http://${EUREKA_HOST:localhost:8761}/eureka/
-
-
-tasks:
-  product-update:
-    cron-expression: "0/10 * * * * *"
-  full-product-export:
-    cron-expression: "0 0/2 * * * *"
