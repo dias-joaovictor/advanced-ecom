@@ -1,6 +1,6 @@
 package br.com.dias.storefrontservice.converter;
 
-import br.com.dias.storefrontservice.entity.ProductData;
+import br.com.dias.storefrontservice.entity.ProductDataEntity;
 import br.com.dias.storefrontservice.model.inbound.response.StockListing;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,9 +14,9 @@ public class StockListingConverterImpl implements StockListingConverter {
     private final ProductAvailabilityConverter productAvailabilityConverter;
 
     @Override
-    public StockListing convert(List<ProductData> productDataList) {
+    public StockListing convert(List<ProductDataEntity> productDataEntityList) {
         return StockListing.builder()
-                .stock(productDataList.stream().map(productAvailabilityConverter::convert).toList())
+                .stock(productDataEntityList.stream().map(productAvailabilityConverter::convert).toList())
                 .build();
     }
 }

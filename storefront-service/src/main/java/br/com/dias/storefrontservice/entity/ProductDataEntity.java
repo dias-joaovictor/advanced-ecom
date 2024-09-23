@@ -1,6 +1,9 @@
 package br.com.dias.storefrontservice.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -10,13 +13,14 @@ import java.sql.Types;
 import java.util.UUID;
 
 @Entity
+@Table(name = "ProductData")
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @SuperBuilder
 @ToString(of = {"id", "sku", "description", "price"})
-public class ProductData extends EcommerceEntity {
+public class ProductDataEntity extends EcommerceEntity {
 
     @Id
     @JdbcTypeCode(Types.CHAR)

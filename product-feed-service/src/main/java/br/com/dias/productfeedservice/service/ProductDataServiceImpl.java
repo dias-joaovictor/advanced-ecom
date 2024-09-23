@@ -1,7 +1,7 @@
 package br.com.dias.productfeedservice.service;
 
 import br.com.dias.productfeedservice.converter.ProductDataFeedConverter;
-import br.com.dias.productfeedservice.entity.ProductData;
+import br.com.dias.productfeedservice.entity.ProductDataEntity;
 import br.com.dias.productfeedservice.messaging.producer.ProductDataProducer;
 import br.com.dias.productfeedservice.repository.ProductDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,22 +53,22 @@ public class ProductDataServiceImpl implements ProductDataService {
         return random.nextBoolean();
     }
 
-    private void fakeUpdatePrice(ProductData productData) {
-        log.info("Updating price for {}", productData);
-        productData.setEnabled(random.nextBoolean());
+    private void fakeUpdatePrice(ProductDataEntity productDataEntity) {
+        log.info("Updating price for {}", productDataEntity);
+        productDataEntity.setEnabled(random.nextBoolean());
 
-        if (productData.isEnabled()) {
+        if (productDataEntity.isEnabled()) {
             BigDecimal priceChangeFactor = BigDecimal.ONE.add(new BigDecimal(random.nextBoolean() ? 1 : -1)
                     .multiply(new BigDecimal(random.nextInt(41))
                             .add(TEN))
                     .divide(HUNDRED, new MathContext(2)));
 
-            var newPrice = productData.getPrice().multiply(priceChangeFactor);
+            var newPrice = productDataEntity.getPrice().multiply(priceChangeFactor);
             if (newPrice.compareTo(TWENTY_FIVE) < 0) {
                 newPrice = TWENTY_FIVE;
             }
-            productData.setPrice(newPrice);
-            productData.setQuantity(random.nextInt(100));
+            productDataEntity.setPrice(newPrice);
+            productDataEntity.setQuantity(random.nextInt(100));
         }
 
     }

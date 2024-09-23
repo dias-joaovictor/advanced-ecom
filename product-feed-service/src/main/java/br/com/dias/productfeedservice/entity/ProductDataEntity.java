@@ -10,13 +10,14 @@ import java.sql.Types;
 import java.util.UUID;
 
 @Entity
+@Table(name = "ProductData")
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @SuperBuilder
 @ToString(of = {"id", "sku", "description", "price"})
-public class ProductData extends EcommerceEntity {
+public class ProductDataEntity extends EcommerceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

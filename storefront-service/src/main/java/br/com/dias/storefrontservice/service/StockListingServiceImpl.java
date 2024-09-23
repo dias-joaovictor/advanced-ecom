@@ -1,7 +1,7 @@
 package br.com.dias.storefrontservice.service;
 
 import br.com.dias.storefrontservice.converter.StockListingConverter;
-import br.com.dias.storefrontservice.entity.ProductData;
+import br.com.dias.storefrontservice.entity.ProductDataEntity;
 import br.com.dias.storefrontservice.model.inbound.response.StockListing;
 import br.com.dias.storefrontservice.repository.ProductDataRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class StockListingServiceImpl implements StockListingService {
 
     public StockListing getStockListing(String sku) {
 
-        List<ProductData> products = sku == null
+        List<ProductDataEntity> products = sku == null
                 ? productDataRepository.findAllByEnabledIsTrue()
                 : productDataRepository.findAllByEnabledIsTrueAndSkuEquals(sku);
 
