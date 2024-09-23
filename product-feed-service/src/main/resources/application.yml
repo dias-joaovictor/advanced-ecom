@@ -10,6 +10,9 @@ management:
     web:
       exposure:
         include: prometheus,health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 springdoc:
   swagger-ui:
@@ -75,3 +78,7 @@ tasks:
     cron-expression: "0 0/3 * * * *"
   full-product-export:
     cron-expression: "0 0/10 * * * *"
+
+loki:
+  host: localhost
+  port: 3100

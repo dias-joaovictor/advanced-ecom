@@ -19,6 +19,7 @@
         <mapstruct.version>1.6.2</mapstruct.version>
         <mapstruct.binding>0.2.0</mapstruct.binding>
         <springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
+        <loki-logback-appender.version>1.5.2</loki-logback-appender.version>
     </properties>
     <dependencies>
         <dependency>
@@ -61,6 +62,15 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.loki4j</groupId>
+            <artifactId>loki-logback-appender</artifactId>
+            <version>${loki-logback-appender.version}</version>
         </dependency>
 
         <dependency>

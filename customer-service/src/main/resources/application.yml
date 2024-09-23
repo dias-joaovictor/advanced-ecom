@@ -10,6 +10,9 @@ management:
     web:
       exposure:
         include: prometheus,health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 springdoc:
   swagger-ui:
@@ -65,3 +68,7 @@ eureka:
   client:
     service-url:
       default-zone: http://${EUREKA_HOST:localhost:8761}/eureka/
+
+loki:
+  host: localhost
+  port: 3100
