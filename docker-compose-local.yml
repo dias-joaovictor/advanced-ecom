@@ -120,3 +120,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 55
+
+  os-mysql:
+    image: mysql:8
+    ports:
+      - "43306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=os
+      - MYSQL_USER=os
+      - MYSQL_PASSWORD=os
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "mysql -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} -D$${MYSQL_DATABASE} -e 'SELECT 1;'"
+      ]
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55

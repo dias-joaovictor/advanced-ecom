@@ -1,0 +1,74 @@
+info:
+  app:
+    name: Order Processing Service
+
+server:
+  port: 8084
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+springdoc:
+  swagger-ui:
+    path: /
+
+spring:
+  application:
+    name: order-processing-service
+  jpa:
+    open-in-view: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:43306/cs}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${DATASOURCE_USERNAME:os}
+    password: ${DATASOURCE_PASSWORD:os}
+    flyway:
+      user: ${DATASOURCE_USERNAME:os}
+      password: ${DATASOURCE_PASSWORD:os}
+
+  cloud:
+    stream:
+      default:
+        group: OrderProcessingService
+        producer:
+          header-mode: none
+      kafka:
+        binder:
+          brokers: ${KAFKA_BROKER_LIST:localhost:9092}
+          configuration:
+            security:
+              protocol: PLAINTEXT
+        bindings:
+          default:
+            consumer:
+              ack-mode: record
+        default:
+          content-type: application/json
+          consumer:
+            start-offset: latest
+      bindings:
+        default:
+          content-type: application/json
+    function:
+      definition:
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://${EUREKA_HOST:localhost:8761}/eureka/
+
+loki:
+  host: localhost
+  port: 3100
