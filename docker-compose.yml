@@ -1,25 +1,23 @@
 services:
   zookeeper:
-    image: wurstmeister/zookeeper:latest
-    hostname: zookeper
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
 
   kafka:
-    image: wurstmeister/kafka:latest
+    image: confluentinc/cp-kafka:latest
     hostname: kafka
     depends_on:
-      - zookeeper
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    links:
       - zookeeper
     ports:
       - "9092:9092"  # External access port (for the host IP)
       - "29092:29092"  # Internal Docker network access port
     environment:
+      - KAFKA_BROKER_ID=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-
       # Bind Kafka to all interfaces on port 29092 for internal Docker network communication
       - KAFKA_LISTENERS=INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
 
