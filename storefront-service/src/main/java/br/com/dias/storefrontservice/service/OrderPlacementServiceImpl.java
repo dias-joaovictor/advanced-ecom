@@ -4,6 +4,10 @@ import br.com.dias.storefrontservice.client.CustomerServiceClient;
 import br.com.dias.storefrontservice.converter.AddressConverter;
 import br.com.dias.storefrontservice.converter.OrderConverter;
 import br.com.dias.storefrontservice.entity.ProductDataEntity;
+import br.com.dias.storefrontservice.entity.Status;
+import br.com.dias.storefrontservice.exception.OrderNotFoundException;
+import br.com.dias.storefrontservice.messaging.producer.OrderProducer;
+import br.com.dias.storefrontservice.model.inbound.messaging.OrderProcessed;
 import br.com.dias.storefrontservice.model.inbound.request.OrderLinesRequest;
 import br.com.dias.storefrontservice.model.inbound.request.OrderPlacementRequest;
 import br.com.dias.storefrontservice.model.inbound.response.OrderPlacementResponse;
@@ -36,6 +40,8 @@ public class OrderPlacementServiceImpl implements OrderPlacementService {
     private final ProductDataService productDataService;
 
     private final Validator validator;
+
+    private final OrderProducer orderProducer;
 
     @Override
     public OrderPlacementResponse placeOrder(@Valid @NotNull OrderPlacementRequest orderPlacementRequest) {
@@ -71,11 +77,36 @@ public class OrderPlacementServiceImpl implements OrderPlacementService {
                     order.setAmount(order.getAmount().add(orderLine.getTotalPrice()));
                     orderLine.setOrder(order);
                 });
+        order.setOrderStatus(Status.PLACED);
         orderRepository.save(order);
 
         return OrderPlacementResponse.builder()
                 .orderId(order.getId())
                 .build();
+    }
+
+    @Override
+    public void exportOrders() {
+        this.orderRepository
+                .findAllByOrderStatus(Status.PLACED)
+                .stream()
+                .map(item -> {
+                    item.setOrderStatus(Status.PROCESSING);
+                    orderRepository.save(item);
+                    return orderConverter.convert(item);
+                })
+                .forEach(orderProducer::produce);
+    }
+
+    @Override
+    public void concludeProcessing(OrderProcessed orderProcessed) {
+        orderRepository.findById(orderProcessed.getOrderId())
+                .ifPresentOrElse(order -> {
+                    order.setOrderStatus(Status.PROCESSED);
+                    orderRepository.save(order);
+                }, () -> {
+                    throw new OrderNotFoundException(orderProcessed.getOrderId().toString());
+                });
     }
 
 }

@@ -39,4 +39,7 @@ public class OrderEntity extends EcommerceEntity {
     @Column(nullable = false)
     private BigDecimal amount;
 
+    @Enumerated(EnumType.STRING)
+    private Status orderStatus;
+
 }

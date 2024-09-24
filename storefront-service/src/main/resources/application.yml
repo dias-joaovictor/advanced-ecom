@@ -61,16 +61,25 @@ spring:
       bindings:
         default:
           content-type: application/json
+        #Producer kafka topic
+        orderProducer-out-0:
+          destination: Order
         #Consumer kafka topic
         productDataFeedConsumer-in-0:
           destination: ProductDataFeed
+        orderProcessedConsumer-in-0:
+          destination: OrderProcessed
     function:
-      definition: productDataFeedConsumer
+      definition: productDataFeedConsumer;orderProcessedConsumer
 
 eureka:
   client:
     service-url:
       default-zone: http://${EUREKA_HOST:localhost:8761}/eureka/
+
+tasks:
+  order-placement:
+    cron-expression: "0 0/1 * * * *"
 
 loki:
   host: localhost
