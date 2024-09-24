@@ -4,7 +4,9 @@ CREATE TABLE Address
     street     VARCHAR(100) NOT NULL,
     city       VARCHAR(100) NOT NULL,
     state      VARCHAR(50)  NOT NULL,
-    postalCode VARCHAR(10)  NOT NULL
+    postalCode VARCHAR(10)  NOT NULL,
+    createdAt  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE Customer
@@ -14,5 +16,7 @@ CREATE TABLE Customer
     lastName  VARCHAR(100) NOT NULL,
     email     VARCHAR(50)  NOT NULL,
     addressId CHAR(36),             -- Foreign key to Address table
+    createdAt  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updatedAt  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_address FOREIGN KEY (addressId) REFERENCES Address (id) ON DELETE CASCADE
 );

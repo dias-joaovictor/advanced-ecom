@@ -4,6 +4,7 @@ import br.com.dias.productfeedservice.converter.ProductDataFeedConverter;
 import br.com.dias.productfeedservice.entity.ProductDataEntity;
 import br.com.dias.productfeedservice.messaging.producer.ProductDataProducer;
 import br.com.dias.productfeedservice.repository.ProductDataRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,11 @@ public class ProductDataServiceImpl implements ProductDataService {
     private final ProductDataFeedConverter productDataFeedConverter;
 
     private final Random random = new Random();
+
+    @PostConstruct
+    public void init() {
+        fullProductExport();
+    }
 
     @Override
     public void fakeProductUpdate() {
