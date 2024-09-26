@@ -1,0 +1,45 @@
+info:
+  app:
+    name: Ecommerce Gateway
+
+server:
+  port: 9999
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+spring:
+  application:
+    name: ecommerce-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: storefront
+          uri: lb://STOREFRONT-SERVICE
+          filters:
+            - StripPrefix=1
+          predicates:
+            - Path=/storefront/**
+        - id: customer
+          uri: lb://CUSTOMER-SERVICE
+          filters:
+            - StripPrefix=1
+          predicates:
+            - Path=/customer/**
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://${EUREKA_HOST:localhost:8761}/eureka/
+    healthcheck:
+      enabled: true
+
+loki:
+  host: localhost
+  port: 3100
