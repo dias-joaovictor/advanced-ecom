@@ -1,6 +1,6 @@
 package br.com.dias.productfeedservice.messaging.producer;
 
-import br.com.dias.commons.messaging.ProductDataFeed;
+import br.com.dias.productfeedservice.model.messaging.ProductDataFeed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;

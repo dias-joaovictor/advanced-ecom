@@ -1,9 +1,9 @@
 package br.com.dias.storefrontservice.service;
 
-import br.com.dias.commons.messaging.ProductDataFeed;
 import br.com.dias.storefrontservice.converter.ProductDataFeedConverter;
 import br.com.dias.storefrontservice.entity.ProductDataEntity;
 import br.com.dias.storefrontservice.exception.ProductNotFoundException;
+import br.com.dias.storefrontservice.model.messaging.ProductDataFeed;
 import br.com.dias.storefrontservice.repository.ProductDataRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

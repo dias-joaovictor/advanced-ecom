@@ -1,7 +1,7 @@
 package br.com.dias.storefrontservice.service;
 
-import br.com.dias.commons.messaging.ProductDataFeed;
 import br.com.dias.storefrontservice.entity.ProductDataEntity;
+import br.com.dias.storefrontservice.model.messaging.ProductDataFeed;
 
 import java.util.List;
 import java.util.Set;

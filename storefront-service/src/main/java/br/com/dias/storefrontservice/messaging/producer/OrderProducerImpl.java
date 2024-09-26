@@ -1,6 +1,6 @@
 package br.com.dias.storefrontservice.messaging.producer;
 
-import br.com.dias.commons.messaging.Order;
+import br.com.dias.storefrontservice.model.messaging.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;

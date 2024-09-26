@@ -1,6 +1,5 @@
 package br.com.dias.storefrontservice.service;
 
-import br.com.dias.commons.messaging.OrderProcessed;
 import br.com.dias.storefrontservice.client.CustomerServiceClient;
 import br.com.dias.storefrontservice.client.PaymentServiceClient;
 import br.com.dias.storefrontservice.converter.AddressConverter;
@@ -13,6 +12,7 @@ import br.com.dias.storefrontservice.model.inbound.request.OrderLinesRequest;
 import br.com.dias.storefrontservice.model.inbound.request.OrderPlacementRequest;
 import br.com.dias.storefrontservice.model.inbound.request.PaymentRequest;
 import br.com.dias.storefrontservice.model.inbound.response.OrderPlacementResponse;
+import br.com.dias.storefrontservice.model.messaging.OrderProcessed;
 import br.com.dias.storefrontservice.model.outbound.request.HoldPaymentRequest;
 import br.com.dias.storefrontservice.repository.OrderRepository;
 import jakarta.transaction.Transactional;

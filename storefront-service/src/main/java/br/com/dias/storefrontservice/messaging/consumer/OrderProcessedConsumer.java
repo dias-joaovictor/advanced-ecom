@@ -1,6 +1,6 @@
 package br.com.dias.storefrontservice.messaging.consumer;
 
-import br.com.dias.commons.messaging.OrderProcessed;
+import br.com.dias.storefrontservice.model.messaging.OrderProcessed;
 import br.com.dias.storefrontservice.service.OrderPlacementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package br.com.dias.productfeedservice.converter;
 
-import br.com.dias.commons.messaging.ProductDataFeed;
 import br.com.dias.productfeedservice.entity.ProductDataEntity;
+import br.com.dias.productfeedservice.model.messaging.ProductDataFeed;
 import org.mapstruct.Mapper;
 
 @Mapper

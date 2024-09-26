@@ -1,6 +1,6 @@
 package br.com.dias.orderprocessingservice.messaging.consumer;
 
-import br.com.dias.commons.messaging.Order;
+import br.com.dias.orderprocessingservice.model.messaging.Order;
 import br.com.dias.orderprocessingservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

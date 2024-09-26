@@ -1,6 +1,6 @@
 package br.com.dias.orderprocessingservice.messaging.producer;
 
-import br.com.dias.commons.messaging.OrderProcessed;
+import br.com.dias.orderprocessingservice.model.messaging.OrderProcessed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;

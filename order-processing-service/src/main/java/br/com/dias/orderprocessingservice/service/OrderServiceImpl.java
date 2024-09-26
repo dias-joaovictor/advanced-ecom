@@ -1,10 +1,10 @@
 package br.com.dias.orderprocessingservice.service;
 
-import br.com.dias.commons.messaging.Order;
-import br.com.dias.commons.messaging.OrderProcessed;
 import br.com.dias.orderprocessingservice.converter.OrderConverter;
 import br.com.dias.orderprocessingservice.entity.Status;
 import br.com.dias.orderprocessingservice.messaging.producer.OrderProcessedProducer;
+import br.com.dias.orderprocessingservice.model.messaging.Order;
+import br.com.dias.orderprocessingservice.model.messaging.OrderProcessed;
 import br.com.dias.orderprocessingservice.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
