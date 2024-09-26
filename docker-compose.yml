@@ -132,13 +132,12 @@ services:
     build:
       context: product-feed-service
       dockerfile: Dockerfile
-
-    ports:
-      - "8080:8080"
     image: product-feed-service:latest
     depends_on:
       pfs-mysql:
         condition: service_healthy
+    deploy:
+      replicas: 2
     environment:
       - DATASOURCE_URL=jdbc:mysql://pfs-mysql:3306/pfs
       - DATASOURCE_USERNAME=pfs
