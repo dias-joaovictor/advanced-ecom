@@ -1,4 +1,36 @@
 services:
+  # Metrics
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --config.file=/etc/prometheus.yaml
+      - --web.enable-remote-write-receiver
+      - --enable-feature=exemplar-storage
+    volumes:
+      - ./config/prometheus/prometheus.yaml:/etc/prometheus.yaml
+    ports:
+      - "9090:9090"
+
+  # Logs
+  loki:
+    image: grafana/loki:2.9.2
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  # UI for Metrics, Logs and Tracing
+  grafana:
+    image: grafana/grafana:10.2.2
+    volumes:
+      - ./config/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor traceQLStreaming metricsSummary
+    ports:
+      - "3000:3000"
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     environment:
@@ -128,7 +160,21 @@ services:
       timeout: 5s
       retries: 55
 
-  pfs:
+  service-discovery:
+    build:
+      context: service-discovery
+      dockerfile: Dockerfile
+    image: service-discovery:latest
+    deploy:
+      replicas: 2
+
+  ecommerce-gateway:
+    build:
+      context: ecommerce-gateway
+      dockerfile: Dockerfile
+    image: ecommerce-gateway:latest
+
+  product-feed-service:
     build:
       context: product-feed-service
       dockerfile: Dockerfile
@@ -142,4 +188,68 @@ services:
       - DATASOURCE_URL=jdbc:mysql://pfs-mysql:3306/pfs
       - DATASOURCE_USERNAME=pfs
       - DATASOURCE_PASSWORD=pfs
+      - KAFKA_BROKER_LIST=kafka:29092
+
+  customer-service:
+    build:
+      context: customer-service
+      dockerfile: Dockerfile
+    image: customer-service:latest
+    depends_on:
+      cs-mysql:
+        condition: service_healthy
+    deploy:
+      replicas: 2
+    environment:
+      - DATASOURCE_URL=jdbc:mysql://cs-mysql:3306/pfs
+      - DATASOURCE_USERNAME=cs
+      - DATASOURCE_PASSWORD=cs
+      - KAFKA_BROKER_LIST=kafka:29092
+
+  storefront-service:
+    build:
+      context: storefront-service
+      dockerfile: Dockerfile
+    image: storefront-service:latest
+    depends_on:
+      sfs-mysql:
+        condition: service_healthy
+    deploy:
+      replicas: 2
+    environment:
+      - DATASOURCE_URL=jdbc:mysql://sfs-mysql:3306/pfs
+      - DATASOURCE_USERNAME=sfs
+      - DATASOURCE_PASSWORD=sfs
+      - KAFKA_BROKER_LIST=kafka:29092
+
+  order-processing-service:
+    build:
+      context: order-processing-service
+      dockerfile: Dockerfile
+    image: order-processing-service:latest
+    depends_on:
+      os-mysql:
+        condition: service_healthy
+    deploy:
+      replicas: 2
+    environment:
+      - DATASOURCE_URL=jdbc:mysql://os-mysql:3306/pfs
+      - DATASOURCE_USERNAME=os
+      - DATASOURCE_PASSWORD=os
+      - KAFKA_BROKER_LIST=kafka:29092
+
+  payment-service:
+    build:
+      context: payment-service
+      dockerfile: Dockerfile
+    image: payment-service:latest
+    depends_on:
+      ps-mysql:
+        condition: service_healthy
+    deploy:
+      replicas: 2
+    environment:
+      - DATASOURCE_URL=jdbc:mysql://ps-mysql:3306/pfs
+      - DATASOURCE_USERNAME=ps
+      - DATASOURCE_PASSWORD=ps
       - KAFKA_BROKER_LIST=kafka:29092
