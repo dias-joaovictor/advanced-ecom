@@ -27,4 +27,6 @@ public class OrderPlacementRequest implements EcommerceRequest {
     private AddressRequest shippingAddress;
 
     private boolean shippingAddressIsCustomersAddress;
+
+    private PaymentRequest payment;
 }

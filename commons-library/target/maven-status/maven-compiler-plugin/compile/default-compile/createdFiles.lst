@@ -1,0 +1,10 @@
+br/com/dias/commons/messaging/ProductDataFeed.class
+br/com/dias/commons/messaging/OrderProcessed.class
+br/com/dias/commons/messaging/ShippingAddress$ShippingAddressBuilder.class
+br/com/dias/commons/messaging/OrderLine.class
+br/com/dias/commons/messaging/OrderProcessed$OrderProcessedBuilder.class
+br/com/dias/commons/messaging/Order$OrderBuilder.class
+br/com/dias/commons/messaging/ProductDataFeed$ProductDataFeedBuilder.class
+br/com/dias/commons/messaging/Order.class
+br/com/dias/commons/messaging/ShippingAddress.class
+br/com/dias/commons/messaging/OrderLine$OrderLineBuilder.class

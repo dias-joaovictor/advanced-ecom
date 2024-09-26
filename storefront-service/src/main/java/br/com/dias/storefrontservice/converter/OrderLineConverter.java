@@ -1,8 +1,8 @@
 package br.com.dias.storefrontservice.converter;
 
+import br.com.dias.commons.messaging.OrderLine;
 import br.com.dias.storefrontservice.entity.OrderLineEntity;
 import br.com.dias.storefrontservice.model.inbound.request.OrderLinesRequest;
-import br.com.dias.storefrontservice.model.outbound.messaging.OrderLine;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

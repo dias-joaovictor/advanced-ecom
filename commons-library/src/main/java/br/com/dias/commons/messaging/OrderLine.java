@@ -1,24 +1,26 @@
-package br.com.dias.storefrontservice.model.outbound.messaging;
+package br.com.dias.commons.messaging;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class ShippingAddress {
+public class OrderLine {
     private UUID id;
 
-    private String street;
+    private String sku;
 
-    private String city;
+    private BigDecimal price;
 
-    private String state;
+    private BigDecimal totalPrice;
 
-    private String postalCode;
+    private int quantity;
+
 }

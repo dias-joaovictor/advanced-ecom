@@ -1,6 +1,7 @@
 package br.com.dias.productfeedservice.messaging.producer;
 
-import br.com.dias.productfeedservice.model.outbound.ProductDataFeed;
+
+import br.com.dias.commons.messaging.ProductDataFeed;
 
 public interface ProductDataProducer {
 

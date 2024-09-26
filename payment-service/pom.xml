@@ -72,7 +72,11 @@
 			<artifactId>loki-logback-appender</artifactId>
 			<version>${loki-logback-appender.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>br.com.dias</groupId>
+			<artifactId>commons-library</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

@@ -1,6 +1,6 @@
 package br.com.dias.paymentservice.model.inbound.response;
 
-import br.com.dias.paymentservice.model.inbound.request.EcommerceRequest;
+import br.com.dias.paymentservice.model.EcommerceRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

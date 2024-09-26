@@ -21,6 +21,22 @@ springdoc:
 spring:
   application:
     name: payment-service
+  jpa:
+    open-in-view: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:53306/ps}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${DATASOURCE_USERNAME:ps}
+    password: ${DATASOURCE_PASSWORD:ps}
+    flyway:
+      user: ${DATASOURCE_USERNAME:ps}
+      password: ${DATASOURCE_PASSWORD:ps}
 
   cloud:
     stream:

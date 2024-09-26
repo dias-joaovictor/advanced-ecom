@@ -1,6 +1,6 @@
 package br.com.dias.storefrontservice.messaging.consumer;
 
-import br.com.dias.storefrontservice.model.inbound.messaging.ProductDataFeed;
+import br.com.dias.commons.messaging.ProductDataFeed;
 import br.com.dias.storefrontservice.service.ProductDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

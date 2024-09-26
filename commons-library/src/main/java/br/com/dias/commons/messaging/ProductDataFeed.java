@@ -1,6 +1,7 @@
-package br.com.dias.storefrontservice.model.inbound.messaging;
+package br.com.dias.commons.messaging;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -8,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-@SuperBuilder
+@Builder
 @AllArgsConstructor
 @Data
 public class ProductDataFeed {
@@ -25,4 +26,6 @@ public class ProductDataFeed {
 
     private int quantity;
 
+    private Instant updatedAt;
 }
+

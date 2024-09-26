@@ -1,17 +1,21 @@
 package br.com.dias.storefrontservice.service;
 
+import br.com.dias.commons.messaging.OrderProcessed;
 import br.com.dias.storefrontservice.client.CustomerServiceClient;
+import br.com.dias.storefrontservice.client.PaymentServiceClient;
 import br.com.dias.storefrontservice.converter.AddressConverter;
 import br.com.dias.storefrontservice.converter.OrderConverter;
 import br.com.dias.storefrontservice.entity.ProductDataEntity;
 import br.com.dias.storefrontservice.entity.Status;
 import br.com.dias.storefrontservice.exception.OrderNotFoundException;
 import br.com.dias.storefrontservice.messaging.producer.OrderProducer;
-import br.com.dias.storefrontservice.model.inbound.messaging.OrderProcessed;
 import br.com.dias.storefrontservice.model.inbound.request.OrderLinesRequest;
 import br.com.dias.storefrontservice.model.inbound.request.OrderPlacementRequest;
+import br.com.dias.storefrontservice.model.inbound.request.PaymentRequest;
 import br.com.dias.storefrontservice.model.inbound.response.OrderPlacementResponse;
+import br.com.dias.storefrontservice.model.outbound.request.HoldPaymentRequest;
 import br.com.dias.storefrontservice.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import org.springframework.validation.Validator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -31,6 +36,7 @@ import java.util.stream.Collectors;
 public class OrderPlacementServiceImpl implements OrderPlacementService {
 
     private final CustomerServiceClient customerServiceClient;
+    private final PaymentServiceClient paymentServiceClient;
     private final OrderRepository orderRepository;
 
     private final AddressConverter addressConverter;
@@ -44,6 +50,7 @@ public class OrderPlacementServiceImpl implements OrderPlacementService {
     private final OrderProducer orderProducer;
 
     @Override
+    @Transactional
     public OrderPlacementResponse placeOrder(@Valid @NotNull OrderPlacementRequest orderPlacementRequest) {
         var customerData = customerServiceClient.findById(orderPlacementRequest.getCustomerId());
         if (orderPlacementRequest.isShippingAddressIsCustomersAddress()) {
@@ -80,6 +87,14 @@ public class OrderPlacementServiceImpl implements OrderPlacementService {
         order.setOrderStatus(Status.PLACED);
         orderRepository.save(order);
 
+        paymentServiceClient.holdPayment(HoldPaymentRequest.builder()
+                .orderId(order.getId())
+                .amount(order.getAmount())
+                .paymentProviderHash(Optional.ofNullable(orderPlacementRequest.getPayment())
+                        .map(PaymentRequest::getPaymentProviderHash)
+                        .orElse(null))
+                .build());
+
         return OrderPlacementResponse.builder()
                 .orderId(order.getId())
                 .build();
@@ -99,11 +114,13 @@ public class OrderPlacementServiceImpl implements OrderPlacementService {
     }
 
     @Override
+    @Transactional
     public void concludeProcessing(OrderProcessed orderProcessed) {
         orderRepository.findById(orderProcessed.getOrderId())
                 .ifPresentOrElse(order -> {
                     order.setOrderStatus(Status.PROCESSED);
                     orderRepository.save(order);
+                    paymentServiceClient.chargePayment(order.getId());
                 }, () -> {
                     throw new OrderNotFoundException(orderProcessed.getOrderId().toString());
                 });
