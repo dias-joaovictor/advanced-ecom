@@ -8,6 +8,8 @@ services:
       - --enable-feature=exemplar-storage
     volumes:
       - ./config/prometheus/prometheus.yaml:/etc/prometheus.yaml
+    networks:
+      - ecommerce-net
     ports:
       - "9090:9090"
 
@@ -17,6 +19,8 @@ services:
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - ecommerce-net
 
   # UI for Metrics, Logs and Tracing
   grafana:
@@ -28,11 +32,15 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_DISABLE_LOGIN_FORM=true
       - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor traceQLStreaming metricsSummary
+    networks:
+      - ecommerce-net
     ports:
       - "3000:3000"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    networks:
+      - ecommerce-net
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -44,6 +52,8 @@ services:
     hostname: kafka
     depends_on:
       - zookeeper
+    networks:
+      - ecommerce-net
     ports:
       - "9092:9092"  # External access port (for the host IP)
       - "29092:29092"  # Internal Docker network access port
@@ -69,6 +79,8 @@ services:
     image: mysql:8
     ports:
       - "13306:3306"
+    networks:
+      - ecommerce-net
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
       - MYSQL_DATABASE=pfs
@@ -88,6 +100,8 @@ services:
     image: mysql:8
     ports:
       - "23306:3306"
+    networks:
+      - ecommerce-net
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
       - MYSQL_DATABASE=sfs
@@ -107,6 +121,8 @@ services:
     image: mysql:8
     ports:
       - "33306:3306"
+    networks:
+      - ecommerce-net
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
       - MYSQL_DATABASE=cs
@@ -126,6 +142,8 @@ services:
     image: mysql:8
     ports:
       - "43306:3306"
+    networks:
+      - ecommerce-net
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
       - MYSQL_DATABASE=os
@@ -145,6 +163,8 @@ services:
     image: mysql:8
     ports:
       - "53306:3306"
+    networks:
+      - ecommerce-net
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
       - MYSQL_DATABASE=ps
@@ -165,6 +185,8 @@ services:
       context: service-discovery
       dockerfile: Dockerfile
     image: service-discovery:latest
+    networks:
+      - ecommerce-net
     ports:
       - "8761:8761"
     environment:
@@ -175,19 +197,28 @@ services:
       context: ecommerce-gateway
       dockerfile: Dockerfile
     image: ecommerce-gateway:latest
+    ports:
+      - "9999:9999"
+    networks:
+      - ecommerce-net
     environment:
       - LOKI_HOST=loki
+      - EUREKA_HOST=service-discovery
 
   product-feed-service:
     build:
       context: product-feed-service
       dockerfile: Dockerfile
     image: product-feed-service:latest
+    ports:
+      - "8080"
     depends_on:
       pfs-mysql:
         condition: service_healthy
     deploy:
       replicas: 2
+    networks:
+      - ecommerce-net
     environment:
       - DATASOURCE_URL=jdbc:mysql://pfs-mysql:3306/pfs
       - DATASOURCE_USERNAME=pfs
@@ -202,11 +233,15 @@ services:
       context: customer-service
       dockerfile: Dockerfile
     image: customer-service:latest
+    ports:
+      - "8082"
     depends_on:
       cs-mysql:
         condition: service_healthy
     deploy:
       replicas: 2
+    networks:
+      - ecommerce-net
     environment:
       - DATASOURCE_URL=jdbc:mysql://cs-mysql:3306/cs
       - DATASOURCE_USERNAME=cs
@@ -221,11 +256,15 @@ services:
       context: storefront-service
       dockerfile: Dockerfile
     image: storefront-service:latest
+    ports:
+      - "8081"
     depends_on:
       sfs-mysql:
         condition: service_healthy
     deploy:
       replicas: 2
+    networks:
+      - ecommerce-net
     environment:
       - DATASOURCE_URL=jdbc:mysql://sfs-mysql:3306/sfs
       - DATASOURCE_USERNAME=sfs
@@ -240,11 +279,15 @@ services:
       context: order-processing-service
       dockerfile: Dockerfile
     image: order-processing-service:latest
+    ports:
+      - "8084"
     depends_on:
       os-mysql:
         condition: service_healthy
     deploy:
       replicas: 2
+    networks:
+      - ecommerce-net
     environment:
       - DATASOURCE_URL=jdbc:mysql://os-mysql:3306/os
       - DATASOURCE_USERNAME=os
@@ -253,17 +296,20 @@ services:
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
 
-
   payment-service:
     build:
       context: payment-service
       dockerfile: Dockerfile
     image: payment-service:latest
+    ports:
+      - "8083"
     depends_on:
       ps-mysql:
         condition: service_healthy
     deploy:
       replicas: 2
+    networks:
+      - ecommerce-net
     environment:
       - DATASOURCE_URL=jdbc:mysql://ps-mysql:3306/ps
       - DATASOURCE_USERNAME=ps
@@ -271,3 +317,8 @@ services:
       - KAFKA_BROKER_LIST=kafka:29092
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
+
+
+networks:
+  ecommerce-net:
+    driver: bridge
