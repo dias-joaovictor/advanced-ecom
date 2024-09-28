@@ -165,14 +165,18 @@ services:
       context: service-discovery
       dockerfile: Dockerfile
     image: service-discovery:latest
-    deploy:
-      replicas: 2
+    ports:
+      - "8761:8761"
+    environment:
+      - LOKI_HOST=loki
 
   ecommerce-gateway:
     build:
       context: ecommerce-gateway
       dockerfile: Dockerfile
     image: ecommerce-gateway:latest
+    environment:
+      - LOKI_HOST=loki
 
   product-feed-service:
     build:
@@ -189,6 +193,9 @@ services:
       - DATASOURCE_USERNAME=pfs
       - DATASOURCE_PASSWORD=pfs
       - KAFKA_BROKER_LIST=kafka:29092
+      - LOKI_HOST=loki
+      - EUREKA_HOST=service-discovery
+
 
   customer-service:
     build:
@@ -201,10 +208,13 @@ services:
     deploy:
       replicas: 2
     environment:
-      - DATASOURCE_URL=jdbc:mysql://cs-mysql:3306/pfs
+      - DATASOURCE_URL=jdbc:mysql://cs-mysql:3306/cs
       - DATASOURCE_USERNAME=cs
       - DATASOURCE_PASSWORD=cs
       - KAFKA_BROKER_LIST=kafka:29092
+      - LOKI_HOST=loki
+      - EUREKA_HOST=service-discovery
+
 
   storefront-service:
     build:
@@ -217,10 +227,13 @@ services:
     deploy:
       replicas: 2
     environment:
-      - DATASOURCE_URL=jdbc:mysql://sfs-mysql:3306/pfs
+      - DATASOURCE_URL=jdbc:mysql://sfs-mysql:3306/sfs
       - DATASOURCE_USERNAME=sfs
       - DATASOURCE_PASSWORD=sfs
       - KAFKA_BROKER_LIST=kafka:29092
+      - LOKI_HOST=loki
+      - EUREKA_HOST=service-discovery
+
 
   order-processing-service:
     build:
@@ -233,10 +246,13 @@ services:
     deploy:
       replicas: 2
     environment:
-      - DATASOURCE_URL=jdbc:mysql://os-mysql:3306/pfs
+      - DATASOURCE_URL=jdbc:mysql://os-mysql:3306/os
       - DATASOURCE_USERNAME=os
       - DATASOURCE_PASSWORD=os
       - KAFKA_BROKER_LIST=kafka:29092
+      - LOKI_HOST=loki
+      - EUREKA_HOST=service-discovery
+
 
   payment-service:
     build:
@@ -249,7 +265,9 @@ services:
     deploy:
       replicas: 2
     environment:
-      - DATASOURCE_URL=jdbc:mysql://ps-mysql:3306/pfs
+      - DATASOURCE_URL=jdbc:mysql://ps-mysql:3306/ps
       - DATASOURCE_USERNAME=ps
       - DATASOURCE_PASSWORD=ps
       - KAFKA_BROKER_LIST=kafka:29092
+      - LOKI_HOST=loki
+      - EUREKA_HOST=service-discovery

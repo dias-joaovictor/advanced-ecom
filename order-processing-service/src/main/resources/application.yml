@@ -70,8 +70,8 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${random.value}
   client:
-    service-url:
-      default-zone: http://${EUREKA_HOST:localhost:8761}/eureka/
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
     healthcheck:
       enabled: true
 
