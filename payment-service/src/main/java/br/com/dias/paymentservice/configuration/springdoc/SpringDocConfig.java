@@ -9,7 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(servers = @Server(url = "/", description = "Default Server URL"))
+@OpenAPIDefinition(servers = {
+        @Server(url = "/", description = "Default Server URL"),
+        @Server(url = "http://localhost:9999/payment-service/", description = "Docker url"),
+})
 public class SpringDocConfig {
 
     @Value("${info.app.name}")

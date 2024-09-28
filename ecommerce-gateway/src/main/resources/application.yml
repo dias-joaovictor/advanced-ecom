@@ -25,13 +25,25 @@ spring:
           filters:
             - StripPrefix=1
           predicates:
-            - Path=/storefront/**
+            - Path=/storefront-service/**
         - id: customer
           uri: lb://CUSTOMER-SERVICE
           filters:
             - StripPrefix=1
           predicates:
-            - Path=/customer/**
+            - Path=/customer-service/**
+        - id: payment
+          uri: lb://PAYMENT-SERVICE
+          filters:
+            - StripPrefix=1
+          predicates:
+            - Path=/payment-service/**
+        - id: order-processing
+          uri: lb://ORDER-PROCESSING-SERVICE
+          filters:
+            - StripPrefix=1
+          predicates:
+            - Path=/order-processing-service/**
 
 eureka:
   instance:
@@ -41,6 +53,25 @@ eureka:
       defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
     healthcheck:
       enabled: true
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - url: /v3/api-docs
+        name: API Gateway Service
+      - url: /storefront-service/v3/api-docs
+        name: Storefront Service
+      - url: /customer-service/v3/api-docs
+        name: Customer Service
+      - url: /payment-service/v3/api-docs
+        name: Payment Service
+      - url: /order-processing-service/v3/api-docs
+        name: Order Processing Service
 
 loki:
   host: localhost

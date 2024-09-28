@@ -14,9 +14,17 @@ management:
     tags:
       application: ${spring.application.name}
 
+openapi:
+  service:
+    title: ${info.app.name} Documentation
+    version: 1.0.0
+    url: http://${API_GATEWAY_URL:localhost:8080} #api gateway url
 springdoc:
+  api-docs:
+    path: /v3/api-docs
   swagger-ui:
     path: /
+
 
 spring:
   application:

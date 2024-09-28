@@ -226,6 +226,7 @@ services:
       - KAFKA_BROKER_LIST=kafka:29092
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
+      - API_GATEWAY_URL=ecommerce-gateway:9999
 
 
   customer-service:
@@ -249,6 +250,7 @@ services:
       - KAFKA_BROKER_LIST=kafka:29092
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
+      - API_GATEWAY_URL=ecommerce-gateway:9999
 
 
   storefront-service:
@@ -272,6 +274,7 @@ services:
       - KAFKA_BROKER_LIST=kafka:29092
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
+      - API_GATEWAY_URL=ecommerce-gateway:9999
 
 
   order-processing-service:
@@ -295,6 +298,7 @@ services:
       - KAFKA_BROKER_LIST=kafka:29092
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
+      - API_GATEWAY_URL=ecommerce-gateway:9999
 
   payment-service:
     build:
@@ -317,7 +321,7 @@ services:
       - KAFKA_BROKER_LIST=kafka:29092
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
-
+      - API_GATEWAY_URL=ecommerce-gateway:9999
 
 networks:
   ecommerce-net:
