@@ -32,6 +32,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderEntity.setOrderStatus(Status.PLACED);
+
+        orderEntity.getOrderLines().forEach(orderLineEntity -> orderLineEntity.setOrder(orderEntity));
         orderRepository.save(orderEntity);
     }
 

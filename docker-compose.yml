@@ -191,6 +191,12 @@ services:
       - "8761:8761"
     environment:
       - LOKI_HOST=loki
+    depends_on:
+      - payment-service
+      - product-feed-service
+      - storefront-service
+      - customer-service
+      - order-processing-service
 
   ecommerce-gateway:
     build:
@@ -204,6 +210,8 @@ services:
     environment:
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
+    depends_on:
+      - service-discovery
 
   product-feed-service:
     build:
@@ -264,7 +272,7 @@ services:
       sfs-mysql:
         condition: service_healthy
     deploy:
-      replicas: 2
+      replicas: 1
     networks:
       - ecommerce-net
     environment:
@@ -275,6 +283,7 @@ services:
       - LOKI_HOST=loki
       - EUREKA_HOST=service-discovery
       - API_GATEWAY_URL=ecommerce-gateway:9999
+#      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
 
 
   order-processing-service:

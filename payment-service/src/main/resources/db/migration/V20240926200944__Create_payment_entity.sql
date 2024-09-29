@@ -1,4 +1,4 @@
-CREATE TABLE PaymentEntity
+CREATE TABLE Payment
 (
     id                  CHAR(36) PRIMARY KEY,
     orderId             CHAR(36)       NOT NULL,

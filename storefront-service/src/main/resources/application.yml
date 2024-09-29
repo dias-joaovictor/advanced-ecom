@@ -78,7 +78,7 @@ spring:
         orderProcessedConsumer-in-0:
           destination: OrderProcessed
     function:
-      definition: productDataFeedConsumer;orderProcessedConsumer
+      definition: productDataFeedConsumer;orderProcessedConsumer;orderProducer
 
 eureka:
   instance:

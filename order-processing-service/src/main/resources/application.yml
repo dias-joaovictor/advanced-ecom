@@ -70,8 +70,10 @@ spring:
           content-type: application/json
         orderProcessedProducer-out-0:
           destination: OrderProcessedProducer
+        orderConsumer-in-0:
+          destination: Order
     function:
-      definition: orderProcessedProducer
+      definition: orderProcessedProducer;orderConsumer
 
 eureka:
   instance:
