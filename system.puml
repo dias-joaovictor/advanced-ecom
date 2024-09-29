@@ -1,0 +1,57 @@
+@startuml
+actor User
+
+participant "storefront-service\n(sfs)" as sfs
+participant "customer-service\n(cs)" as cs
+participant "order-processing-service\n(os)" as os
+participant "payment-service\n(ps)" as ps
+participant "product-feed-service\n(pfs)" as pfs
+database "sfs DB" as sfsdb
+database "os DB" as osdb
+queue "Kafka" as kafka
+
+== Product Data Feed ==
+
+pfs -[#blue,dotted]-> kafka: Produce ProductDataFeed messages
+sfs -[#blue,dotted]-> kafka: Subscribe to ProductDataFeed
+kafka -[#blue,dotted]-> sfs: ProductDataFeed messages
+sfs -> sfsdb: Save ProductDataFeed data
+
+== User Creation ==
+
+User -> sfs: Access storefront
+User -> cs: POST /users
+cs -> cs: Create User
+
+== Place Order ==
+
+User -> sfs: Place Order
+sfs -> cs: GET /customers/{customerId}
+cs --> sfs: Customer data
+sfs -> ps: Check payment data
+ps --> sfs: Payment data
+sfs -[#blue,dotted]-> kafka: Produce Order message
+
+== Order Processing ==
+
+os -[#blue,dotted]-> kafka: Subscribe to Order topic
+kafka -[#blue,dotted]-> os: Order messages
+os -> osdb: Save Order as PLACED
+
+== Order State Changes ==
+
+os -> os: Job changes Order state to PAYMENT_AUTHORIZED
+os -> ps: Charge payment
+ps --> os: Payment confirmed
+
+os -> os: Job changes Order state to PROCESSING
+
+os -> os: Job changes Order state to DISPATCHED
+os -[#blue,dotted]-> kafka: Produce OrderProcessed message
+
+== Order Processed ==
+
+sfs -[#blue,dotted]-> kafka: Subscribe to OrderProcessed topic
+kafka -[#blue,dotted]-> sfs: OrderProcessed messages
+sfs -> sfsdb: Update Order state to PROCESSED
+@enduml
