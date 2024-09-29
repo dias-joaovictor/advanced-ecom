@@ -69,7 +69,7 @@ spring:
         default:
           content-type: application/json
         orderProcessedProducer-out-0:
-          destination: OrderProcessedProducer
+          destination: OrderProcessed
         orderConsumer-in-0:
           destination: Order
     function:
