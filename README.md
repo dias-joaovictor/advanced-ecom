@@ -147,6 +147,9 @@ Below is a table summarizing the services, their host, and port configurations:
     - **Service Discovery** (Eureka): `http://localhost:8761`
     - **E-commerce Gateway**: `http://localhost:9999`
 
+- **Swagger**:
+    - http://localhost:9999/
+
 ## Technologies Used
 
 Advanced-Ecom leverages a range of modern technologies to provide a robust, scalable, and efficient e-commerce platform. Below is a detailed list of the key technologies used in this project:
