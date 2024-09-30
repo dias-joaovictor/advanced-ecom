@@ -7,11 +7,22 @@ participant "order-processing-service\n(os)" as os
 participant "payment-service\n(ps)" as ps
 participant "product-feed-service\n(pfs)" as pfs
 database "sfs DB" as sfsdb
+database "pfs DB" as pfsdb
 database "os DB" as osdb
 queue "Kafka" as kafka
 
-== Product Data Feed ==
+== Product Data Feed(Full Export) ==
+pfs -> pfsdb: Fetch all products in the database
+pfsdb --> pfs: returns the products
+pfs -[#blue,dotted]-> kafka: Produce ProductDataFeed messages
+sfs -[#blue,dotted]-> kafka: Subscribe to ProductDataFeed
+kafka -[#blue,dotted]-> sfs: ProductDataFeed messages
+sfs -> sfsdb: Save ProductDataFeed data
 
+== Product Data Feed(Fake Updates) ==
+pfs -> pfsdb: Fetch all products in the database
+pfsdb --> pfs: returns the products
+pfs -> pfs: Select randomly products to be updated and apply update logic
 pfs -[#blue,dotted]-> kafka: Produce ProductDataFeed messages
 sfs -[#blue,dotted]-> kafka: Subscribe to ProductDataFeed
 kafka -[#blue,dotted]-> sfs: ProductDataFeed messages

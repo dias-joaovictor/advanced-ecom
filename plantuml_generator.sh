@@ -10,5 +10,5 @@ if [ ! -n "$CONTAINER_ID" ]; then
 fi
 
 
-cat system.puml | curl -X POST --data-binary @- http://localhost:${PORT}/png > payment.png
+cat sequence_diagram.puml | curl -X POST --data-binary @- http://localhost:${PORT}/png > sequence_diagram.png
 
