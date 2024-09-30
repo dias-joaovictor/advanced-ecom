@@ -76,13 +76,13 @@ To run the entire application with all services:
 
 1. **Start Services**
 ```bash
-docker compose up -u
+./start_containers.sh
 ```
 
 #### Running Individual Services
 1. **Start Infra**
 ```bash
-docker compose up -f docker-compose-local.yml -u
+./start_containers_local.sh
 ```
 2. **Access the module you want to run**
 3. **Run the app with maven**
